@@ -91,8 +91,12 @@ WSGI_APPLICATION = 'Janaki_Books.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'janaki_books',
+        'HOST': 'localhost',
+        'USER': 'root',
+        'PASSWORD': 'Value@5',
+
     }
 }
 
