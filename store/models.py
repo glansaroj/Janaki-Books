@@ -7,6 +7,12 @@ class Collection(models.Model):
     featured_product = models.ForeignKey(
         'Product', on_delete=models.SET_NULL, null=True, related_name='+')
 
+    def __str__(self) -> str:
+        return self.title
+
+    class Meta:
+        ordering = ['title']
+
 
 class Promotion(models.Model):
     description = models.CharField(max_length=300)
@@ -24,6 +30,12 @@ class Product(models.Model):
     promotions = models.ManyToManyField(Promotion)
     slug = models.SlugField(default='-')
 
+    def __str__(self) -> str:
+        return self.title
+
+    class Meta:
+        ordering = ['title']
+
 
 class Customer(models.Model):
     MEMBERSHIP_STANDARD = 'S'
@@ -39,10 +51,16 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    phone = models.IntegerField(unique=True)
+    phone = models.CharField(max_length=10, unique=True)
     birth_date = models.DateField(null=True)
     membership = models.CharField(
         max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_STANDARD)
+
+    def __str__(self):
+        return f'{self.first_name}  {self.last_name}'
+
+    class Meta:
+        ordering = ['first_name', 'last_name']
 
     # class Meta:
     #     db_table = 'store_customers'
