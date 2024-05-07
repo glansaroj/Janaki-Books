@@ -1,4 +1,6 @@
+
 from django.db import models
+from django.core.validators import MinValueValidator
 
 
 # Create your models here.
@@ -22,13 +24,18 @@ class Promotion(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=270)
+    slug = models.SlugField(default='')
     description = models.TextField()
-    unit_price = models.DecimalField(max_digits=7, decimal_places=2)
-    inventory = models.IntegerField()
+    unit_price = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+        validators=[MinValueValidator(1)]
+    )
+    inventory = models.IntegerField(
+        validators=[MinValueValidator(1)])
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
-    promotions = models.ManyToManyField(Promotion)
-    slug = models.SlugField(default='-')
+    promotions = models.ManyToManyField(Promotion, blank=True)  # optional
 
     def __str__(self) -> str:
         return self.title
@@ -96,7 +103,7 @@ class OrderItem(models.Model):
 class Address(models.Model):
     city = models.CharField(max_length=100)
     street = models.CharField(max_length=100)
-    zipcode = models.IntegerField(max_length=5, null=True)
+    zipcode = models.IntegerField(null=True)
     customers = models.ForeignKey(
         Customer, on_delete=models.CASCADE)
 
